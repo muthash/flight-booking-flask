@@ -9,17 +9,16 @@ class Booking(BaseModel):
 
     __tablename__ = 'bookings'
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    booking_date = db.Column(db.DateTime, default=db.func.current_timestamp())
+    id = db.Column(db.Integer, primary_key=True)
+    booking_date = db.Column(db.DateTime, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    flight_id = db.Column(db.Integer, db.ForeignKey('flight_schedules.id'),
+    flight_id = db.Column(db.Integer, db.ForeignKey('flights.id'),
                           nullable=False)
-    emails = db.relationship('EmailSchedule', backref='booking',
-                             order_by='email_schedules.id',
-                             cascade="all, delete-orphan", lazy=True)
+    emails = db.relationship('EmailSchedule', backref='booking', lazy=True)
 
     def __init__(self, user_id, flight_id):
         """Initialize the booking with the reservation details"""
+        self.booking_date = datetime.datetime.now()
         self.user_id = user_id
         self.flight_id = flight_id
 
@@ -32,9 +31,9 @@ class EmailSchedule(BaseModel):
 
     __tablename__ = 'email_schedules'
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True)
     send_date = db.Column(db.DateTime, nullable=False)
-    status = db.Column(db.String(120), default='pending')
+    status = db.Column(db.String(120), nullable=False)
     booking_id = db.Column(db.Integer, db.ForeignKey('bookings.id'),
                            nullable=False)
 

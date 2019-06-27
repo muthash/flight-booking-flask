@@ -9,13 +9,11 @@ class Airport(BaseModel):
 
     __tablename__ = 'airports'
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), nullable=False)
     country = db.Column(db.String(256), nullable=False)
     city = db.Column(db.String(256), nullable=False)
-    flights = db.relationship('Flight', backref='airport',
-                              order_by='flight_schedules.id',
-                              cascade="all, delete-orphan", lazy=True)
+    flights = db.relationship('Flight', backref='airport', lazy=True)
 
     def __init__(self, name, country, city):
         """Initialize the airport with the airport details"""
@@ -32,15 +30,13 @@ class Airplane(BaseModel):
 
     __tablename__ = 'airplanes'
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True)
     reg_number = db.Column(db.Integer, nullable=False)
     total_seats = db.Column(db.Integer, nullable=False)
     economy_seats = db.Column(db.Integer, nullable=False)
     business_seats = db.Column(db.Integer, nullable=False)
     first_class_seats = db.Column(db.Integer, nullable=False)
-    flights = db.relationship('Flight', backref='airplane',
-                              order_by='flight_schedules.id',
-                              cascade="all, delete-orphan", lazy=True)
+    flights = db.relationship('Flight', backref='airplane', lazy=True)
 
     def __init__(self, reg_number, economy_seats, business_seats=0,
                  first_class_seats=0):
@@ -58,24 +54,21 @@ class Airplane(BaseModel):
 class Flight(BaseModel):
     """This class defines the flight schedules table"""
 
-    __tablename__ = 'flight_schedules'
+    __tablename__ = 'flights'
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True)
     departure_date = db.Column(db.DateTime, nullable=False)
     departure_airport_id = db.Column(db.Integer, db.ForeignKey('airports.id'),
                                      nullable=False)
     arrival_date = db.Column(db.DateTime, nullable=False)
-    arrival_airport_id = db.Column(db.Integer, db.ForeignKey('airports.id'),
-                                   nullable=False)
+    arrival_airport_id = db.Column(db.Integer, nullable=False)
     status = db.Column(db.String(256), default='upcoming')
-    airplane = db.Column(db.Integer, db.ForeignKey('airplanes.id'),
-                         nullable=False)
+    airplane_id = db.Column(db.Integer, db.ForeignKey('airplanes.id'),
+                            nullable=False)
     booked_first = db.Column(db.Integer, default=0)
     booked_business = db.Column(db.Integer, default=0)
     booked_economy = db.Column(db.Integer, default=0)
-    bookings = db.relationship('Booking', backref='flight',
-                               order_by='bookings.id',
-                               cascade="all, delete-orphan", lazy=True)
+    bookings = db.relationship('Booking', backref='flight', lazy=True)
 
     def __init__(self, departure_date, departure_airport_id, arrival_date,
                  arrival_airport_id, airplane):
