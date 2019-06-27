@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.com/muthash/flight-booking-flask.svg?branch=develop)](https://travis-ci.com/muthash/flight-booking-flask)
+[![Coverage Status](https://coveralls.io/repos/github/muthash/flight-booking-flask/badge.svg?branch=develop)](https://coveralls.io/github/muthash/flight-booking-flask?branch=develop)
+[![Maintainability](https://api.codeclimate.com/v1/badges/fc6831fb0680bdd545a1/maintainability)](https://codeclimate.com/github/muthash/flight-booking-flask/maintainability)
 ## Flight Booking API
 A flight booking flask API that provides users with ability to:
 - Register for an account
