@@ -2,6 +2,7 @@ import datetime
 
 from app import db
 from app.base_model import BaseModel
+from app.flights.models import Flight
 
 
 class Booking(BaseModel):
