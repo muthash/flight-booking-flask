@@ -6,10 +6,11 @@ import datetime
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
-from app import db, create_app
+from app import db, create_app, ROOT_DIR
 from app.auth.models import User
 from app.bookings.models import Booking, EmailSchedule
 from app.flights.models import Airport, Airplane, Flight
+
 
 app = create_app(os.getenv('FLASK_ENV'))
 migrate = Migrate(app, db)
@@ -58,6 +59,16 @@ def cov():
     print('HTML version: file://%s/index.html' % covdir)
     cov.erase()
 
+
+@manager.command
+def create_folder():
+    """Runs the unit tests without test coverage."""
+    uploads_dir = os.path.join(ROOT_DIR, 'images')
+    try:
+        os.makedirs(uploads_dir)
+        print("Folder created successfully")
+    except Exception as e:
+        print(str(e))
 
 if __name__ == '__main__':
     manager.run()

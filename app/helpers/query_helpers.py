@@ -1,8 +1,10 @@
+import os
 import datetime
 
 from flask import jsonify
 from flask_jwt_extended import create_access_token
 
+from app import ROOT_DIR
 from app.auth.models import User
 
 
@@ -28,3 +30,17 @@ def save_user(email, name, password):
     user = User(email, name, password)
     user.save()
 
+
+def get_user(user_id):
+    return User.query.filter_by(id=user_id).first()
+
+
+def save_image(image, filename):
+    image.save(os.path.join(ROOT_DIR, 'images', filename))
+
+
+def delete_image(user):
+    try:
+        os.remove(os.path.join(ROOT_DIR, 'images', user.passport))
+    except Exception as e:
+        print("Deleting " + user.passport + "failed because of " + str(e))
