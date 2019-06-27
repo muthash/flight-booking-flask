@@ -17,6 +17,13 @@ login_args = {
     "password": fields.Str(required=True),
     }
 
+passport_args = {
+    "passport_image": fields.Field(
+        required=True,
+        validate=lambda f: f.mimetype in ["image/jpeg", "image/jpg",
+                                          "image/png"]),
+    }
+
 
 def check_email(email):
     """Check for a valid email address and
