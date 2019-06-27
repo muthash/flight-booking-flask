@@ -1,6 +1,8 @@
 """ The create_app function wraps the creation of a new Flask object, and
     returns it after it's loaded up with configuration settingsusing app.config
 """
+import os
+
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
@@ -10,6 +12,8 @@ from instance.config import app_config
 
 db = SQLAlchemy()
 jwt = JWTManager()
+
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def create_app(config_name):
