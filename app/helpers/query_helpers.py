@@ -6,13 +6,14 @@ from flask_jwt_extended import create_access_token
 
 from app import ROOT_DIR
 from app.auth.models import User
+from app.flights.models import Airport, Airplane, Flight
 
 
 def generate_token(message, user, expires=datetime.timedelta(hours=1)):
     """Return access token and response to user"""
     response = {'message': message,
                 'access_token': create_access_token(
-                        identity=user.id, expires_delta=expires)}
+                        identity=user, expires_delta=expires)}
     return jsonify(response), 200
 
 
@@ -44,3 +45,20 @@ def delete_image(user):
         os.remove(os.path.join(ROOT_DIR, 'images', user.passport))
     except Exception as e:
         print("Deleting " + user.passport + "failed because of " + str(e))
+
+
+def save_airport(name, country, city):
+    airport = Airport(name, country, city)
+    airport.save()
+
+
+def save_airplane(reg_number, economy, business, first_class):
+    airplane = Airplane(reg_number, economy, business, first_class)
+    airplane.save()
+
+
+def save_flight(reg_number, economy_seats, business_seats,
+                first_class_seats, airplane_id):
+    flight = Flight(reg_number, economy_seats, business_seats,
+                    first_class_seats, airplane_id)
+    flight.save()
