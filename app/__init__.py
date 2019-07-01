@@ -26,6 +26,7 @@ def create_app(config_name):
     jwt.init_app(app)
 
     from app.auth.views import auth
+    from app.flights.views import flight
 
     @app.errorhandler(422)
     @app.errorhandler(400)
@@ -37,6 +38,15 @@ def create_app(config_name):
         else:
             return jsonify({"errors": messages}), err.code
 
+    @jwt.user_claims_loader
+    def add_claims_to_access_token(user):
+        return {'roles': user.is_admin}
+
+    @jwt.user_identity_loader
+    def user_identity_lookup(user):
+        return user.id
+
     app.register_blueprint(auth)
+    app.register_blueprint(flight)
 
     return app
