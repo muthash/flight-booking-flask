@@ -85,7 +85,7 @@ class AirplaneManipulation(MethodView):
 
 
 class FlightManipulation(MethodView):
-    """Class to manipulate the airport details"""
+    """Class to manipulate the flight details"""
     @jwt_required
     @use_kwargs(flight_args, locations=("json",))
     def post(self, departure_date, departure_airport_id, arrival_date,
@@ -104,7 +104,7 @@ class FlightManipulation(MethodView):
 
     @jwt_required
     def get(self):
-        """return a list of all airplanes"""
+        """Return a list of all flights"""
         try:
             flights_data = Flight.get_all()
             if not flights_data:
