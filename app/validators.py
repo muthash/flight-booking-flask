@@ -24,6 +24,12 @@ passport_args = {
                                           "image/png"]),
     }
 
+airport_args = {
+    "name": fields.Str(required=True, validate=validate.Length(min=3)),
+    "country": fields.Str(required=True, validate=validate.Length(min=3)),
+    "city": fields.Str(required=True, validate=validate.Length(min=3)),
+    }
+
 
 def check_email(email):
     """Check for a valid email address and
