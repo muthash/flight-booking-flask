@@ -5,7 +5,7 @@ from flask_jwt_extended import (
     jwt_required, get_jwt_identity, get_jwt_claims)
 
 from app import db
-from app.flights.models import Airport
+from app.flights.models import Airport, Airplane
 from app.validators import (
     airport_args, airplane_args)
 from app.helpers.query_helpers import (
@@ -32,7 +32,7 @@ class AirportManipulation(MethodView):
 
     @jwt_required
     def get(self):
-        """return a list of all businesses else a single business"""
+        """return a list of all airports"""
         try:
             airports_data = Airport.get_all()
             if not airports_data:
@@ -62,6 +62,23 @@ class AirplaneManipulation(MethodView):
             save_airplane(reg_number.upper(), economy_seats, business_seats,
                           first_class_seats)
             return generate_response('Airplane registered successfully', 201)
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'error': str(e)}), 401
+
+    @jwt_required
+    def get(self):
+        """return a list of all airplanes"""
+        try:
+            airplanes_data = Airplane.get_all()
+            if not airplanes_data:
+                return generate_response('No data to display', 200)
+
+            airplanes = [airplane.serialize() for airplane in airplanes_data]
+            response = {'airports': airplanes,
+                        'number_of_airports': len(airplanes),
+                        'message': "Data retrived successfully"}
+            return jsonify(response), 200
         except Exception as e:
             db.session.rollback()
             return jsonify({'error': str(e)}), 401

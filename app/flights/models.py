@@ -60,6 +60,21 @@ class Airplane(BaseModel):
         self.business_seats = business_seats
         self.first_class_seats = first_class_seats
 
+    def serialize(self):
+        """Return a dictionary"""
+        return {
+            'airport_id': self.id,
+            'reg_number': self.reg_number,
+            'first_class_seats': self.first_class_seats,
+            'business_seats': self.business_seats,
+            'economy_seats': self.economy_seats,
+            'total_seats': self.total_seats
+        }
+
+    @staticmethod
+    def get_all():
+        return Airplane.query.all()
+
     def __repr__(self):
         return 'Airplane: {}'.format(self.reg_number)
 
