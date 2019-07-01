@@ -17,15 +17,25 @@ class BaseTestCase(unittest.TestCase):
         with self.app.app_context():
             db.drop_all()
             db.create_all()
+        self.data = {}
         self.header = {'Content-Type': 'application/json'}
         self.reg_data = {"name": "stephen",
                          "email": "user@test.com",
                          "password": "Tests12!@"}
 
+    def login(self):
+        "login a test user"
+        self.client.post('/api/register', headers=self.header,
+                         data=json.dumps(self.reg_data))
+        return self.client.post('/api/login', headers=self.header,
+                                data=json.dumps(self.reg_data))
 
-
-        # self.reg_data = {'email': 'user@test.com', 'name': 'stephen',
-        #                  'password': 'Tests12!@'}
+    def get_login_token(self):
+        """Get the access token and add it to the header"""
+        login_res = self.login()
+        result = json.loads(login_res.data.decode())
+        self.header['Authorization'] = 'Bearer ' + result['access_token']
+        return result
 
     def tearDown(self):
         """teardown all initialized variables"""
