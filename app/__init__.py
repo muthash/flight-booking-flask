@@ -27,6 +27,7 @@ def create_app(config_name):
 
     from app.auth.views import auth
     from app.flights.views import flight
+    from app.bookings.views import booking
 
     @app.errorhandler(422)
     @app.errorhandler(400)
@@ -48,5 +49,6 @@ def create_app(config_name):
 
     app.register_blueprint(auth)
     app.register_blueprint(flight)
+    app.register_blueprint(booking)
 
     return app
