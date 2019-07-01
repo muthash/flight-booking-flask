@@ -8,7 +8,7 @@ from flask_migrate import Migrate, MigrateCommand
 
 from app import db, create_app, ROOT_DIR
 from app.auth.models import User
-from app.bookings.models import Booking, EmailSchedule
+from app.bookings.models import Booking
 from app.flights.models import Airport, Airplane, Flight
 
 

@@ -48,14 +48,13 @@ class Airplane(BaseModel):
     total_seats = db.Column(db.Integer, nullable=False)
     economy_seats = db.Column(db.Integer, nullable=False)
     business_seats = db.Column(db.Integer, nullable=False)
-    first_class_seats = db.Column(db.Integer, nullable=False)
     flights = db.relationship('Flight', backref='airplane', lazy=True)
 
     def __init__(self, reg_number, economy_seats, business_seats,
                  first_class_seats):
         """Initialize the airplane details"""
         self.reg_number = reg_number
-        self.total_seats = economy_seats + business_seats + first_class_seats
+        self.total_seats = economy_seats + business_seats
         self.economy_seats = economy_seats
         self.business_seats = business_seats
         self.first_class_seats = first_class_seats
@@ -93,7 +92,6 @@ class Flight(BaseModel):
     status = db.Column(db.String(256), default='upcoming')
     airplane_id = db.Column(db.Integer, db.ForeignKey('airplanes.id'),
                             nullable=False)
-    booked_first = db.Column(db.Integer, default=0)
     booked_business = db.Column(db.Integer, default=0)
     booked_economy = db.Column(db.Integer, default=0)
     bookings = db.relationship('Booking', backref='flight', lazy=True)
