@@ -6,7 +6,7 @@ from flask_jwt_extended import create_access_token
 
 from app import ROOT_DIR
 from app.auth.models import User
-from app.flights.models import Airport, Airplane
+from app.flights.models import Airport, Airplane, Flight
 
 
 def generate_token(message, user, expires=datetime.timedelta(hours=1)):
@@ -55,3 +55,10 @@ def save_airport(name, country, city):
 def save_airplane(reg_number, economy, business, first_class):
     airplane = Airplane(reg_number, economy, business, first_class)
     airplane.save()
+
+
+def save_flight(reg_number, economy_seats, business_seats,
+                first_class_seats, airplane_id):
+    flight = Flight(reg_number, economy_seats, business_seats,
+                    first_class_seats, airplane_id)
+    flight.save()

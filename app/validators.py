@@ -10,25 +10,25 @@ user_args = {
     "email": fields.Str(required=True, validate=validate.Email()),
     "password": fields.Str(required=True, validate=validate.Length(min=8)),
     "name": fields.Str(required=True, validate=validate.Length(min=2)),
-    }
+}
 
 login_args = {
     "email": fields.Str(required=True, validate=validate.Email()),
     "password": fields.Str(required=True),
-    }
+}
 
 passport_args = {
     "passport_image": fields.Field(
         required=True,
         validate=lambda f: f.mimetype in ["image/jpeg", "image/jpg",
                                           "image/png"]),
-    }
+}
 
 airport_args = {
     "name": fields.Str(required=True, validate=validate.Length(min=3)),
     "country": fields.Str(required=True, validate=validate.Length(min=3)),
     "city": fields.Str(required=True, validate=validate.Length(min=3)),
-    }
+}
 
 
 airplane_args = {
@@ -36,7 +36,16 @@ airplane_args = {
     "economy_seats": fields.Int(required=True, validate=lambda val: val > 0),
     "business_seats": fields.Int(required=True, validate=lambda val: val >= 0),
     "first_class_seats": fields.Int(required=True, validate=lambda val: val >= 0),
-    }
+}
+
+
+flight_args = {
+    "departure_date": fields.Str(required=True),
+    "departure_airport_id": fields.Int(required=True, validate=lambda val: val > 0),
+    "arrival_date": fields.Str(required=True),
+    "arrival_airport_id": fields.Int(required=True, validate=lambda val: val > 0),
+    "airplane_id": fields.Int(required=True, validate=lambda val: val > 0),
+}
 
 
 def check_email(email):
