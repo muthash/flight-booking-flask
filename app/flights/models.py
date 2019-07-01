@@ -21,8 +21,21 @@ class Airport(BaseModel):
         self.country = country
         self.city = city
 
+    def serialize(self):
+        """Return a dictionary"""
+        return {
+            'airport_id': self.id,
+            'airport_name': self.name,
+            'country': self.country,
+            'city': self.city
+        }
+
+    @staticmethod
+    def get_all():
+        return Airport.query.all()
+
     def __repr__(self):
-        return 'airpots: {}'.format(self.name)
+        return 'airports: {}'.format(self.name)
 
 
 class Airplane(BaseModel):
