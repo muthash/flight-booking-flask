@@ -55,9 +55,8 @@ class BookingManipulation(MethodView):
                 return generate_response('Selected flight not available', 400)
 
             bookings_data = filter_booking_by_flight(flight_id)
-            bookings = [booking.booking_date.strftime('%b %d %Y') == booking_date and
-                        booking.serialize()
-                        for booking in bookings_data]
+            bookings = [booking.serialize() for booking in bookings_data
+                        if booking.booking_date.strftime('%b %d %Y') == booking_date]
             response = {'booking_details': bookings,
                         'number_of_booking': len(bookings),
                         'message': "Data retrived successfully"}
