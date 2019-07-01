@@ -7,19 +7,19 @@ from flask_jwt_extended import (
 from app import db
 from app.flights.models import Airport
 from app.validators import (
-    airport_args)
+    airport_args, airplane_args)
 from app.helpers.query_helpers import (
-    generate_response, save_airport)
+    generate_response, save_airport, save_airplane)
 
 flight = Blueprint('flight', __name__, url_prefix='/api')
 
 
-class AiportManipulation(MethodView):
+class AirportManipulation(MethodView):
     """Class to manipulate the airport details"""
     @jwt_required
     @use_kwargs(airport_args, locations=("json",))
     def post(self, name, country, city):
-        """POST method to enter a new airport details"""
+        """POST method to add a new airport details"""
         current_roles = get_jwt_claims()['roles']
         if not current_roles:
             return generate_response("Forbidden, Admins only!", 403)
@@ -48,4 +48,24 @@ class AiportManipulation(MethodView):
             return jsonify({'error': str(e)}), 401
 
 
-flight.add_url_rule('/airport', view_func=AiportManipulation.as_view('airport'))
+class AirplaneManipulation(MethodView):
+    """Class to manipulate the airport details"""
+    @jwt_required
+    @use_kwargs(airplane_args, locations=("json",))
+    def post(self, reg_number, economy_seats, business_seats,
+             first_class_seats):
+        """POST method to add a new airplane details"""
+        current_roles = get_jwt_claims()['roles']
+        if not current_roles:
+            return generate_response("Forbidden, Admins only!", 403)
+        try:
+            save_airplane(reg_number.upper(), economy_seats, business_seats,
+                          first_class_seats)
+            return generate_response('Airplane registered successfully', 201)
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'error': str(e)}), 401
+
+
+flight.add_url_rule('/airport', view_func=AirportManipulation.as_view('airport'))
+flight.add_url_rule('/airplane', view_func=AirplaneManipulation.as_view('airplane'))

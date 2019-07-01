@@ -44,15 +44,15 @@ class Airplane(BaseModel):
     __tablename__ = 'airplanes'
 
     id = db.Column(db.Integer, primary_key=True)
-    reg_number = db.Column(db.Integer, nullable=False)
+    reg_number = db.Column(db.String, nullable=False)
     total_seats = db.Column(db.Integer, nullable=False)
     economy_seats = db.Column(db.Integer, nullable=False)
     business_seats = db.Column(db.Integer, nullable=False)
     first_class_seats = db.Column(db.Integer, nullable=False)
     flights = db.relationship('Flight', backref='airplane', lazy=True)
 
-    def __init__(self, reg_number, economy_seats, business_seats=0,
-                 first_class_seats=0):
+    def __init__(self, reg_number, economy_seats, business_seats,
+                 first_class_seats):
         """Initialize the airplane details"""
         self.reg_number = reg_number
         self.total_seats = economy_seats + business_seats + first_class_seats

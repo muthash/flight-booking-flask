@@ -31,6 +31,14 @@ airport_args = {
     }
 
 
+airplane_args = {
+    "reg_number": fields.Str(required=True, validate=validate.Length(min=3)),
+    "economy_seats": fields.Int(required=True, validate=lambda val: val > 0),
+    "business_seats": fields.Int(required=True, validate=lambda val: val >= 0),
+    "first_class_seats": fields.Int(required=True, validate=lambda val: val >= 0),
+    }
+
+
 def check_email(email):
     """Check for a valid email address and
        lowercase the domain part of the email
