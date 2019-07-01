@@ -63,7 +63,7 @@ class Airplane(BaseModel):
     def serialize(self):
         """Return a dictionary"""
         return {
-            'airport_id': self.id,
+            'airplane_id': self.id,
             'reg_number': self.reg_number,
             'first_class_seats': self.first_class_seats,
             'business_seats': self.business_seats,
@@ -99,13 +99,34 @@ class Flight(BaseModel):
     bookings = db.relationship('Booking', backref='flight', lazy=True)
 
     def __init__(self, departure_date, departure_airport_id, arrival_date,
-                 arrival_airport_id, airplane):
+                 arrival_airport_id, airplane_id):
         """Initialize the flight details"""
         self.departure_date = departure_date
         self.departure_airport_id = departure_airport_id
         self.arrival_date = arrival_date
         self.arrival_airport_id = arrival_airport_id
-        self.airplane = airplane
+        self.airplane_id = airplane_id
+
+    def get_arrival_airport(self):
+        return Airport.query.filter_by(id=self.arrival_airport_id).first()
+
+    def serialize(self):
+        """Return a dictionary"""
+        self.arrival_airport = self.get_arrival_airport()
+        return {
+            'flight_id': self.id,
+            'departure_date': self.departure_date,
+            'departure_airport': self.airport.name,
+            'departure_city': self.airport.city,
+            'arrival_date': self.arrival_date,
+            'arrival_airport': self.arrival_airport.name,
+            'arrival_city': self.arrival_airport.city,
+            'flight_status': self.status
+        }
+
+    @staticmethod
+    def get_all():
+        return Flight.query.all()
 
     def __repr__(self):
         return 'Flight: {}'.format(self.id)
