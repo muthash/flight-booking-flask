@@ -2,16 +2,19 @@
     returns it after it's loaded up with configuration settingsusing app.config
 """
 import os
+import atexit
+import logging
 
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
-
+from flask_mail import Mail
 
 from instance.config import app_config
 
 db = SQLAlchemy()
 jwt = JWTManager()
+mail = Mail()
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -22,12 +25,17 @@ def create_app(config_name):
     """
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(app_config[config_name])
+    db.app = app
     db.init_app(app)
     jwt.init_app(app)
+    mail.init_app(app)
 
     from app.auth.views import auth
     from app.flights.views import flight
     from app.bookings.views import booking
+    from app.helpers.send_email import background_scheduler
+
+    background_scheduler()
 
     @app.errorhandler(422)
     @app.errorhandler(400)
