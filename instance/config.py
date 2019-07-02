@@ -15,6 +15,19 @@ class Config(object):
     CSRF_ENABLED = True
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
 
+    # mail settings
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 465
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+
+    # gmail authentication
+    MAIL_USERNAME = os.getenv('APP_MAIL_USERNAME')
+    MAIL_PASSWORD = os.getenv('APP_MAIL_PASSWORD')
+
+    # mail accounts
+    MAIL_DEFAULT_SENDER = os.getenv('APP_MAIL_USERNAME')
+
 
 class ProductionConfig(Config):
     DEBUG = False
@@ -22,6 +35,7 @@ class ProductionConfig(Config):
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    USE_RELOADER = False
 
 
 class TestingConfig(Config):
