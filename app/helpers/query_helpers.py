@@ -4,7 +4,7 @@ import datetime
 from flask import jsonify
 from flask_jwt_extended import create_access_token
 
-from app import ROOT_DIR
+from app import ROOT_DIR, db
 from app.auth.models import User
 from app.flights.models import Airport, Airplane, Flight
 from app.bookings.models import Booking
@@ -76,3 +76,9 @@ def get_flight(flight_id):
 
 def filter_booking_by_flight(flight_id):
     return Booking.query.filter_by(flight_id=flight_id).all()
+
+
+def get_tomorrow_flights():
+    tomorrow = datetime.date.today() + datetime.timedelta(days=1)
+    with db.app.app_context():
+        return Flight.query.filter_by(departure_date=tomorrow).all()
