@@ -22,14 +22,17 @@ manager.add_command('db', MigrateCommand)
 @manager.command
 def create_admin():
     """Creates the admin user."""
-    db.session.add(User(
-        email="admin@min.com",
-        name="administrator",
-        password="admin",
-        is_admin=True,
-        confirmed=True)
-    )
-    db.session.commit()
+    try:
+        db.session.add(User(
+            email=os.getenv('ADMIN_EMAIL'),
+            name=os.getenv('ADMIN_NAME'),
+            password=os.getenv('ADMIN_PASSWORD'),
+            is_admin=True,
+            confirmed=True)
+        )
+        db.session.commit()
+    except Exception as e:
+        print(str(e))
 
 
 @manager.command
@@ -62,7 +65,7 @@ def cov():
 
 @manager.command
 def create_folder():
-    """Runs the unit tests without test coverage."""
+    """create the images folder."""
     uploads_dir = os.path.join(ROOT_DIR, 'images')
     try:
         os.makedirs(uploads_dir)
