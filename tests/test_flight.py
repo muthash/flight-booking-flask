@@ -51,3 +51,49 @@ class TestAirportManipulation(BaseTestCase):
         result = json.loads(res.data.decode())
         self.assertEqual(result['message'], "No data to display")
         self.assertEqual(res.status_code, 200)
+
+
+class TestAirplaneManipulation(BaseTestCase):
+    """Test for Airplane manipulation endpoint"""
+    def test_admin_airport_addition(self):
+        """Test adding airplane by admin works correcty"""
+        self.admin_login()
+        res = self.client.post('api/airplane',
+                               headers=self.header,
+                               data=json.dumps(self.airplane_data))
+        result = json.loads(res.data.decode())
+        self.assertEqual(result['message'],
+                         "Airplane registered successfully")
+        self.assertEqual(res.status_code, 201)
+
+    def test_user_airplane_addition(self):
+        """Test adding airplane by user is not possible"""
+        self.get_login_token()
+        res = self.client.post('api/airplane',
+                               headers=self.header,
+                               data=json.dumps(self.airplane_data))
+        result = json.loads(res.data.decode())
+        self.assertEqual(result['message'],
+                         "Forbidden, Admins only!")
+        self.assertEqual(res.status_code, 403)
+
+    def test_get_available_airplanes(self):
+        """Test get all available airplanes"""
+        self.admin_login()
+        self.client.post('api/airplane',
+                         headers=self.header,
+                         data=json.dumps(self.airplane_data))
+        res = self.client.get('api/airplane',
+                              headers=self.header)
+        result = json.loads(res.data.decode())
+        self.assertEqual(result['number_of_airplanes'], 1)
+        self.assertEqual(res.status_code, 200)
+
+    def test_get_no_airplanes(self):
+        """Test get all airplanes before adding"""
+        self.admin_login()
+        res = self.client.get('api/airplane',
+                              headers=self.header)
+        result = json.loads(res.data.decode())
+        self.assertEqual(result['message'], "No data to display")
+        self.assertEqual(res.status_code, 200)

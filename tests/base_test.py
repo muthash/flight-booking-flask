@@ -37,6 +37,12 @@ class BaseTestCase(unittest.TestCase):
             "country": "Kenya",
             "city": "Nairobi"
         }
+        self.airplane_data = {
+            "reg_number": "FKJL76T",
+            "economy_seats": 50,
+            "business_seats": 10,
+            "first_class_seats": 5
+        }
 
     def login(self):
         "login a test user"

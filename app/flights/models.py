@@ -64,7 +64,6 @@ class Airplane(BaseModel):
         return {
             'airplane_id': self.id,
             'reg_number': self.reg_number,
-            'first_class_seats': self.first_class_seats,
             'business_seats': self.business_seats,
             'economy_seats': self.economy_seats,
             'total_seats': self.total_seats
