@@ -2,10 +2,13 @@
 Base Test case with setup and methods that other
 test classes inherit
 """
+import os
 import unittest
 import json
 import datetime
+
 from app import create_app, db
+from manage import create_admin
 
 
 class BaseTestCase(unittest.TestCase):
@@ -17,11 +20,23 @@ class BaseTestCase(unittest.TestCase):
         with self.app.app_context():
             db.drop_all()
             db.create_all()
+            create_admin()
         self.data = {}
         self.header = {'Content-Type': 'application/json'}
-        self.reg_data = {"name": "stephen",
-                         "email": "user@test.com",
-                         "password": "Tests12!@"}
+        self.reg_data = {
+            "name": "stephen",
+            "email": "user@test.com",
+            "password": "Tests12!@"
+        }
+        self.admin_data = {
+            "email": os.getenv('ADMIN_EMAIL'),
+            "password": os.getenv('ADMIN_PASSWORD')
+        }
+        self.airport_data = {
+            "name": "JKIA",
+            "country": "Kenya",
+            "city": "Nairobi"
+        }
 
     def login(self):
         "login a test user"
@@ -36,6 +51,13 @@ class BaseTestCase(unittest.TestCase):
         result = json.loads(login_res.data.decode())
         self.header['Authorization'] = 'Bearer ' + result['access_token']
         return result
+
+    def admin_login(self):
+        "login admin test user"
+        login_res = self.client.post('/api/login', headers=self.header,
+                                     data=json.dumps(self.admin_data))
+        result = json.loads(login_res.data.decode())
+        self.header['Authorization'] = 'Bearer ' + result['access_token']
 
     def tearDown(self):
         """teardown all initialized variables"""
