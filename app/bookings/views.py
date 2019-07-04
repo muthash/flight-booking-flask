@@ -32,13 +32,13 @@ class BookingManipulation(MethodView):
                 data = dict(booked_economy=flight.booked_economy+1)
                 save_booking(current_user, flight_id)
                 flight.update(flight, **data)
-                return generate_response('Economy seat flight reservation successfull', 200)
+                return generate_response('Economy seat flight reservation successfull', 201)
 
             if seat == 2 and flight.booked_business < flight.airplane.business_seats:
                 data = dict(booked_business=flight.booked_business+1)
                 save_booking(current_user, flight_id)
                 flight.update(flight, **data)
-                return generate_response('Business seat flight reservation successfull', 200)
+                return generate_response('Business seat flight reservation successfull', 201)
 
         except Exception as e:
             db.session.rollback()
@@ -46,7 +46,7 @@ class BookingManipulation(MethodView):
 
     @jwt_required
     def get(self, flight_id):
-        """return a list of all reservations in a given day"""
+        """Return a list of all reservations in a given day"""
         booking_date = request.args.get('bdate', datetime.now().strftime('%b %d %Y'), type=str)
         current_user = get_jwt_identity()
         try:
