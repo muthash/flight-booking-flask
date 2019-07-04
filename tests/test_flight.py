@@ -1,9 +1,7 @@
-"""Test case for the user functionality"""
+"""Test case for the flight creation functionality"""
 import os
 import json
 
-from app import create_app, db
-from app.auth.models import User
 from tests.base_test import BaseTestCase
 
 

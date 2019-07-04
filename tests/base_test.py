@@ -55,6 +55,11 @@ class BaseTestCase(unittest.TestCase):
             "country": "Kenya",
             "city": "Kisumu"
         }
+        self.booking_data = {
+            "name": "KISUMU",
+            "country": "Kenya",
+            "city": "Kisumu"
+        }
 
     def login(self):
         "login a test user"
