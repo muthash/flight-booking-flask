@@ -97,3 +97,58 @@ class TestAirplaneManipulation(BaseTestCase):
         result = json.loads(res.data.decode())
         self.assertEqual(result['message'], "No data to display")
         self.assertEqual(res.status_code, 200)
+
+
+class TestFlightManipulation(BaseTestCase):
+    """Test for Flight manipulation endpoint"""
+    def create_flight(self):
+        self.admin_login()
+        self.client.post('api/airport',
+                         headers=self.header,
+                         data=json.dumps(self.airport_data))
+        self.client.post('api/airport',
+                         headers=self.header,
+                         data=json.dumps(self.arrival_airport_data))
+        self.client.post('api/airplane',
+                         headers=self.header,
+                         data=json.dumps(self.airplane_data))
+        return self.client.post('api/flight',
+                                headers=self.header,
+                                data=json.dumps(self.flight_data))
+
+    def test_admin_flight_addition(self):
+        """Test adding flight by admin works correcty"""
+        res = self.create_flight()
+        result = json.loads(res.data.decode())
+        self.assertEqual(result['message'],
+                         "Flight schedule added successfully")
+        self.assertEqual(res.status_code, 201)
+
+    def test_user_flight_addition(self):
+        """Test adding flight by user is not possible"""
+        self.get_login_token()
+        res = self.client.post('api/flight',
+                               headers=self.header,
+                               data=json.dumps(self.flight_data))
+        result = json.loads(res.data.decode())
+        self.assertEqual(result['message'],
+                         "Forbidden, Admins only!")
+        self.assertEqual(res.status_code, 403)
+
+    def test_get_available_flights(self):
+        """Test get all available flights"""
+        self.create_flight()
+        res = self.client.get('api/flight',
+                              headers=self.header)
+        result = json.loads(res.data.decode())
+        self.assertTrue(result['flights'])
+        self.assertEqual(res.status_code, 200)
+
+    def test_get_no_flights(self):
+        """Test get all flights before adding"""
+        self.admin_login()
+        res = self.client.get('api/flight',
+                              headers=self.header)
+        result = json.loads(res.data.decode())
+        self.assertEqual(result['message'], "No data to display")
+        self.assertEqual(res.status_code, 200)

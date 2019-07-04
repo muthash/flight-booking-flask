@@ -43,6 +43,18 @@ class BaseTestCase(unittest.TestCase):
             "business_seats": 10,
             "first_class_seats": 5
         }
+        self.flight_data = {
+            "departure_date": "Jul 06 2019 12:00PM",
+            "departure_airport_id": 1,
+            "arrival_date": "Jul 06 2019 11:00PM",
+            "arrival_airport_id": 2,
+            "airplane_id": 1
+        }
+        self.arrival_airport_data = {
+            "name": "KISUMU",
+            "country": "Kenya",
+            "city": "Kisumu"
+        }
 
     def login(self):
         "login a test user"
