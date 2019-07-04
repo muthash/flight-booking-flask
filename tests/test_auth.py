@@ -49,6 +49,15 @@ class TestRegisterUser(BaseTestCase):
                          "one lowercase letter.")
         self.assertEqual(res.status_code, 400)
 
+    def test_register_invalid_email(self):
+        """Test user registration with a non deliverable email address"""
+        self.reg_data['email'] = 'invalid@asbvggghv.ck'
+        res = self.register()
+        result = json.loads(res.data.decode())
+        self.assertEqual(result['message'],
+                         "The domain name asbvggghv.ck does not exist.")
+        self.assertEqual(res.status_code, 400)
+
 
 class TestLoginUser(BaseTestCase):
     """Test for Login User endpoint"""
@@ -90,13 +99,30 @@ class TestPassportUpload(BaseTestCase):
                          "File uploaded successfully")
         self.assertEqual(res.status_code, 201)
 
+    def test_file_update(self):
+        """Test image update works as expected"""
+        self.uploadpassport()
+        res = self.uploadpassport()
+        result = json.loads(res.data.decode())
+        self.assertEqual(result['message'],
+                         "File uploaded successfully")
+        self.assertEqual(res.status_code, 201)
+
     def test_delete_file(self):
         """Test delete image works as expected"""
-        self.get_login_token()
         self.uploadpassport()
         res = self.client.delete('api/uploads/passport',
                                  headers=self.header)
         result = json.loads(res.data.decode())
-        self.assertEqual(result['message'],
-                         "File deleted successfully")
+        self.assertEqual(result['message'], "File deleted successfully")
         self.assertEqual(res.status_code, 200)
+
+    def test_delete_no_file(self):
+        """Test delete empty image file not allowed"""
+        self.get_login_token()
+        res = self.client.delete('api/uploads/passport',
+                                 headers=self.header)
+        result = json.loads(res.data.decode())
+        self.assertEqual(result['message'],
+                         "Cannot delete blank image file")
+        self.assertEqual(res.status_code, 401)
