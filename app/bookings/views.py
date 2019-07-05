@@ -21,7 +21,9 @@ class BookingManipulation(MethodView):
     def post(self, flight_id):
         """POST method to add a new flight booking"""
         data = request.get_json()
-        seat = data.get('seat')
+        seat = 1
+        if data:
+            seat = data.get('seat')
         current_user = get_jwt_identity()
         try:
             flight = get_flight(flight_id)
