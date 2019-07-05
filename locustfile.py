@@ -71,7 +71,7 @@ class UserBehavior(TaskSet):
 
     @task()
     def post_booking(self):
-        self.client.post('api/booking/1',
+        self.client.post('/api/booking/20',
                          headers=self.headers,
                          data=json.dumps(dict(seat=1)))
 
