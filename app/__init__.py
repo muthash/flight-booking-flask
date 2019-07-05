@@ -6,6 +6,7 @@ import atexit
 import logging
 
 from flask import Flask, jsonify
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_mail import Mail
@@ -24,6 +25,7 @@ def create_app(config_name):
         loaded up with configuration settings
     """
     app = Flask(__name__, instance_relative_config=True)
+    CORS(app)
     app.config.from_object(app_config[config_name])
     db.app = app
     db.init_app(app)
@@ -36,6 +38,13 @@ def create_app(config_name):
     from app.helpers.send_email import background_scheduler
 
     background_scheduler()
+
+    @app.route('/')
+    def index():
+        return jsonify({"message":
+                        ("Welcome to Flight Booking API, "
+                         "This is a flask API that provides User Authentication, "
+                         "Flight Search, Flight Booking and Email Notifications.")}), 200
 
     @app.errorhandler(422)
     @app.errorhandler(400)
