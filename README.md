@@ -146,3 +146,7 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9eyJpYXQiO
 | /api/flight | GET | Add all flight schedules | TRUE
 | /api/v1/booking/<flight_id> | POST | Book a flight | TRUE
 | /api/v1/booking/<flight_id>?bdate=Jul 02 2020 | GET | Get flight booking for a particular day | TRUE
+
+### Heroku Production Link
+Interact with the hosted application using this link
+https://flight-booking-flask.herokuapp.com/
