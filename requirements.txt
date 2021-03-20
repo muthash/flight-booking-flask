@@ -20,7 +20,7 @@ gunicorn==19.9.0
 idna==2.8
 isort==4.3.20
 itsdangerous==1.1.0
-Jinja2==2.10.1
+Jinja2==2.11.3
 lazy-object-proxy==1.4.1
 Mako==1.0.12
 MarkupSafe==1.1.1
